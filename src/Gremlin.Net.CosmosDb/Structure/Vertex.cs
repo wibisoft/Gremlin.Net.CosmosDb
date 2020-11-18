@@ -20,8 +20,8 @@ namespace Gremlin.Net.CosmosDb.Structure
         [JsonProperty(PropertyNames.Properties)]
         public virtual IDictionary<string, ICollection<VertexPropertyValue>> Properties
         {
-            get { return _properties; }
-            set { _properties = value ?? new Dictionary<string, ICollection<VertexPropertyValue>>(); }
+            get => _properties;
+            set => _properties = value ?? new Dictionary<string, ICollection<VertexPropertyValue>>();
         }
 
         private IDictionary<string, ICollection<VertexPropertyValue>> _properties = new Dictionary<string, ICollection<VertexPropertyValue>>();
@@ -40,7 +40,7 @@ namespace Gremlin.Net.CosmosDb.Structure
         public T ToObject<T>()
             where T : class
         {
-            return ToObject<T>(new JsonSerializerSettings());
+            return (T)ToObject(typeof(T));
         }
 
         /// <summary>
@@ -59,24 +59,34 @@ namespace Gremlin.Net.CosmosDb.Structure
         /// Converts this vertex to an object of type <paramref name="objectType"/>.
         /// </summary>
         /// <param name="objectType">The type of object to convert to</param>
+        /// <returns>Returns the converted object</returns>
+        public object ToObject(Type objectType)
+        {
+	        return ToObject(objectType, null);
+        }
+
+        /// <summary>
+        /// Converts this vertex to an object of type <paramref name="objectType"/>.
+        /// </summary>
+        /// <param name="objectType">The type of object to convert to</param>
         /// <param name="serializerSettings">The serializer settings.</param>
         /// <returns>Returns the converted object</returns>
-        public object ToObject(Type objectType, JsonSerializerSettings serializerSettings = null)
+        public object ToObject(Type objectType, JsonSerializerSettings serializerSettings)
         {
             //convert the properties to a flattened version, capturing the values under each key
             //the destination object type should determine if we get only the first value or all values (as an array)
             //for each property
-            var serializer = JsonSerializer.Create(serializerSettings ?? new JsonSerializerSettings());
-            var contract = (JsonObjectContract)serializer.ContractResolver.ResolveContract(objectType);
-            var flattenedProperties = new Dictionary<string, object>
+            JsonSerializer serializer = CreateJsonSerializer(serializerSettings);
+            JsonObjectContract contract = (JsonObjectContract)serializer.ContractResolver.ResolveContract(objectType);
+            Dictionary<string, object> flattenedProperties = new Dictionary<string, object>
             {
                 [PropertyNames.Id] = Id,
                 [PropertyNames.Label] = Label
             };
 
-            foreach (var kvp in Properties)
+            foreach (KeyValuePair<string, ICollection<VertexPropertyValue>> kvp in Properties)
             {
-                var propertyContract = contract.Properties.GetClosestMatchProperty(kvp.Key);
+                JsonProperty propertyContract = contract.Properties.GetClosestMatchProperty(kvp.Key);
 
                 flattenedProperties[kvp.Key] = propertyContract == null || !TypeHelper.IsScalar(propertyContract.PropertyType)
                     ? kvp.Value.Select(pv => pv.Value).ToList()

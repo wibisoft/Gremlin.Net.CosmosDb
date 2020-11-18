@@ -1,4 +1,5 @@
-﻿using Gremlin.Net.Process.Traversal;
+﻿using System.Collections.Generic;
+using Gremlin.Net.Process.Traversal;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 
@@ -20,9 +21,9 @@ namespace Gremlin.Net.CosmosDb
         /// <returns>Returns the resulting traversal</returns>
         public static GraphTraversal<S, E> AddObjectProperties<S, E>(GraphTraversal<S, E> traversal, object obj, JsonSerializerSettings serializationSettings)
         {
-            var serializedObj = JObject.FromObject(obj, JsonSerializer.Create(serializationSettings));
+            JObject serializedObj = JObject.FromObject(obj, JsonSerializer.Create(serializationSettings));
 
-            foreach (var prop in serializedObj)
+            foreach (KeyValuePair<string, JToken> prop in serializedObj)
             {
                 //ignore null values
                 switch (prop.Value.Type)
@@ -37,7 +38,7 @@ namespace Gremlin.Net.CosmosDb
                         if (!prop.Value.HasValues)
                             break;
 
-                        foreach (var value in prop.Value.Values())
+                        foreach (JToken value in prop.Value.Values())
                         {
                             traversal = traversal.Property(Cardinality.List, prop.Key, value);
                         }

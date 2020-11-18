@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFrameworks>netstandard2.0;netcoreapp2.0</TargetFrameworks>
+    <TargetFrameworks>netstandard2.1</TargetFrameworks>
     <Authors>Terren Musselwhite</Authors>
     <Company>evo</Company>
     <PackageTags>gremlin cosmos cosmosdb gremlin.net</PackageTags>
@@ -34,7 +34,11 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Gremlin.Net" Version="3.4.2" />
+    <Compile Remove="TypeCache.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Gremlin.Net" Version="3.4.8" />
   </ItemGroup>
 
 </Project>

@@ -18,11 +18,11 @@ namespace Gremlin.Net.CosmosDb.Structure
         /// </summary>
         /// <param name="type">The type.</param>
         /// <returns>Returns the name</returns>
-        public static string GetLabelName(Type type)
+        public static string GetLabelName(this Type type)
         {
             return _typeLabelLookup.GetOrAdd(type, t =>
             {
-                var attr = type.GetCustomAttributes(TypeCache.LabelAttribute, false).OfType<LabelAttribute>().FirstOrDefault();
+                LabelAttribute attr = type.GetCustomAttributes(typeof(LabelAttribute), false).Cast<LabelAttribute>().FirstOrDefault();
 
                 return attr?.Name ?? type.Name.Substring(0, 1).ToLower() + type.Name.Substring(1);
             });
@@ -33,11 +33,11 @@ namespace Gremlin.Net.CosmosDb.Structure
         /// </summary>
         /// <param name="property">The property.</param>
         /// <returns>Returns the label name.</returns>
-        public static string GetLabelName(PropertyInfo property)
+        public static string GetLabelName(this PropertyInfo property)
         {
             return _propertyLabelLookup.GetOrAdd(property, p =>
             {
-                var attr = p.GetCustomAttribute<LabelAttribute>() ?? p.PropertyType.GetCustomAttribute<LabelAttribute>();
+                LabelAttribute attr = p.GetCustomAttribute<LabelAttribute>() ?? p.PropertyType.GetCustomAttribute<LabelAttribute>();
 
                 return attr?.Name ?? p.Name.Substring(0, 1).ToLower() + p.Name.Substring(1);
             });

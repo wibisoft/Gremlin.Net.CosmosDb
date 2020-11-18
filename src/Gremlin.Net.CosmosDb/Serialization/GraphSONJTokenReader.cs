@@ -35,20 +35,20 @@ namespace Gremlin.Net.CosmosDb.Serialization
             switch (token.Type)
             {
                 case JTokenType.Array:
-                    var arr = (JArray)token;
-                    for (var i = 0; i < arr.Count; i++)
+                    JArray arr = (JArray)token;
+                    for (int i = 0; i < arr.Count; i++)
                     {
                         arr[i] = ConvertDateJson(arr[i]);
                     }
                     return arr;
 
                 case JTokenType.Date:
-                    var date = (DateTime)token;
+                    DateTime date = (DateTime)token;
                     return JToken.FromObject(date.ToUniversalTime());
 
                 case JTokenType.Object:
-                    var obj = (JObject)token;
-                    foreach (var prop in obj.Properties())
+                    JObject obj = (JObject)token;
+                    foreach (JProperty prop in obj.Properties())
                     {
                         obj[prop.Name] = ConvertDateJson(obj[prop.Name]);
                     }

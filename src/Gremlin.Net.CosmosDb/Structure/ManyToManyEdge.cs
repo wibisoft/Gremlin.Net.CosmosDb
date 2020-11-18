@@ -16,8 +16,8 @@ namespace Gremlin.Net.CosmosDb.Structure
         /// </summary>
         public IList<TInV> InV
         {
-            get { return _inV ?? new TInV[0]; }
-            set { _inV = value; }
+            get => _inV ?? new TInV[0];
+            set => _inV = value;
         }
 
         /// <summary>
@@ -25,8 +25,8 @@ namespace Gremlin.Net.CosmosDb.Structure
         /// </summary>
         public IList<TOutV> OutV
         {
-            get { return _outV ?? new TOutV[0]; }
-            set { _outV = value; }
+            get => _outV ?? new TOutV[0];
+            set => _outV = value;
         }
 
         private IList<TInV> _inV;

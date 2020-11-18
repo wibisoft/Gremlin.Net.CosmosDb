@@ -28,7 +28,7 @@ namespace Gremlin.Net.CosmosDb
         public GraphClient(string gremlinHostname, string databaseName, string graphName, string accessKey,
             int port = 443, bool useSSL = true)
         {
-            var server = new GremlinServer(gremlinHostname, port, useSSL, $"/dbs/{databaseName}/colls/{graphName}", accessKey);
+            GremlinServer server = new GremlinServer(gremlinHostname, port, useSSL, $"/dbs/{databaseName}/colls/{graphName}", accessKey);
 
             _gremlinClient = new GremlinClient(server, new GraphSONJTokenReader(), mimeType: GremlinClient.GraphSON2MimeType);
         }
@@ -71,7 +71,7 @@ namespace Gremlin.Net.CosmosDb
             if (gremlinQuery == null)
                 throw new ArgumentNullException(nameof(gremlinQuery));
 
-            var resultSet = await _gremlinClient.SubmitAsync<JToken>(gremlinQuery);
+            ResultSet<JToken> resultSet = await _gremlinClient.SubmitAsync<JToken>(gremlinQuery);
 
             return new GraphResult(resultSet);
         }

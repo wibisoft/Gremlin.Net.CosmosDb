@@ -36,10 +36,10 @@ namespace Gremlin.Net.CosmosDb.Serialization
                 // what we need to do is merge the two edges.
 
                 // these are the potential properties that contains the vertices further down in the tree
-                var vertexProps = edge.GetType().GetProperties().Where(p => TypeCache.IVertex.IsAssignableFrom(TypeHelper.UnderlyingType(p.PropertyType)));
+                IEnumerable<PropertyInfo> vertexProps = edge.GetType().GetProperties().Where(p => typeof(IVertex).IsAssignableFrom(TypeHelper.UnderlyingType(p.PropertyType)));
 
                 // we only expect one of them to be populated proceed if they have a value.
-                foreach (var prop in vertexProps)
+                foreach (PropertyInfo prop in vertexProps)
                 {
                     switch (prop.GetValue(edge))
                     {
@@ -49,7 +49,7 @@ namespace Gremlin.Net.CosmosDb.Serialization
                             continue;
                         case IEnumerable vEnum:
                             // if not, connect them all to the existing edge.
-                            foreach (var vert in vEnum.OfType<IVertex>())
+                            foreach (IVertex vert in vEnum.OfType<IVertex>())
                             {
                                 ConnectVertex(existingEdge, vert);
                             }
@@ -68,16 +68,16 @@ namespace Gremlin.Net.CosmosDb.Serialization
         /// </summary>
         public bool ConnectVertex(IEdge edge, IVertex vertex)
         {
-            var vertexType = vertex.GetType();
+            Type vertexType = vertex.GetType();
 
             // potential properties on the edge that are compatible with the vertex type
-            var potentialVertexProperties = edge.GetType().GetProperties().Where(p => TypeHelper.UnderlyingType(p.PropertyType).IsAssignableFrom(vertexType)).ToList();
+            List<PropertyInfo> potentialVertexProperties = edge.GetType().GetProperties().Where(p => TypeHelper.UnderlyingType(p.PropertyType).IsAssignableFrom(vertexType)).ToList();
 
             // if the number of properties isn't exactly 1, this is no longer trivial and a more specific implementation
             // should be used (create a specific IVertexConnector to handle this.)
             if (potentialVertexProperties.Count == 1)
             {
-                var prop = potentialVertexProperties[0];
+                PropertyInfo prop = potentialVertexProperties[0];
 
                 // in case of scalar, simply set the value this would be the case for edges like
                 // * OneToOne
@@ -91,7 +91,7 @@ namespace Gremlin.Net.CosmosDb.Serialization
                 {
                     // If we are here, it means that the property is an array The strategy here is to create a new array
                     // with room for one more vertex, and then set the value of the property to this new array instead
-                    var currentValue = prop.GetValue(edge) as Array;
+                    Array currentValue = prop.GetValue(edge) as Array;
                     List<IVertex> allVertices;
 
                     if (currentValue != null)
@@ -103,7 +103,7 @@ namespace Gremlin.Net.CosmosDb.Serialization
                         allVertices = new List<IVertex>() { vertex };
                     }
 
-                    var newArr = Array.CreateInstance(prop.PropertyType.GetElementType(), allVertices.Count);
+                    Array newArr = Array.CreateInstance(prop.PropertyType.GetElementType(), allVertices.Count);
 
                     for (int i = 0; i < allVertices.Count; i++)
                     {
@@ -124,8 +124,8 @@ namespace Gremlin.Net.CosmosDb.Serialization
                     else
                     {
                         // If not, create the list and add the vertex
-                        var underlying = TypeHelper.UnderlyingType(prop.PropertyType);
-                        var newList = Activator.CreateInstance(typeof(List<>).MakeGenericType(underlying)) as IList;
+                        Type underlying = TypeHelper.UnderlyingType(prop.PropertyType);
+                        IList newList = Activator.CreateInstance(typeof(List<>).MakeGenericType(underlying)) as IList;
                         newList.Add(vertex);
                         prop.SetValue(edge, newList);
                     }
@@ -133,10 +133,10 @@ namespace Gremlin.Net.CosmosDb.Serialization
             }
             else
             {
-                var exception = new Exception($"Unable to attach vertex {vertex.GetType().Name} to edge {edge.GetType().Name}, found {potentialVertexProperties.Count} possible properties, but can only use exactly 1.");
+                Exception exception = new Exception($"Unable to attach vertex {vertex.GetType().Name} to edge {edge.GetType().Name}, found {potentialVertexProperties.Count} possible properties, but can only use exactly 1.");
 
                 // Add some (hopefully) useful information
-                foreach (var prop in potentialVertexProperties)
+                foreach (PropertyInfo prop in potentialVertexProperties)
                 {
                     exception.Data.Add(prop.Name, prop);
                 }

@@ -14,7 +14,7 @@ namespace Gremlin.Net.CosmosDb
         /// </summary>
         public MoqFixture()
         {
-            this.Customize(new AutoMoqCustomization { ConfigureMembers = true });
+            Customize(new AutoMoqCustomization { ConfigureMembers = true });
         }
     }
 }

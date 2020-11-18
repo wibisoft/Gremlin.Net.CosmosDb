@@ -26,7 +26,7 @@ namespace Gremlin.Net.CosmosDb
             //loop through the method's attributes and apply any customizations to the fixture before supplying
             //the specimens for the method parameters
 #pragma warning disable 618
-            foreach (var att in methodUnderTest.GetCustomAttributes<WithCustomizationAttribute>(false))
+            foreach (WithCustomizationAttribute att in methodUnderTest.GetCustomAttributes<WithCustomizationAttribute>(false))
             {
                 Fixture.Customize(att.Customization);
             }

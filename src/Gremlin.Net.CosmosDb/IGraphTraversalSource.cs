@@ -1,8 +1,8 @@
-﻿using Gremlin.Net.CosmosDb.Structure;
-using Gremlin.Net.Process.Traversal;
-
-namespace Gremlin.Net.CosmosDb
+﻿namespace Gremlin.Net.CosmosDb
 {
+	using Structure;
+	using Process.Traversal;
+
     /// <summary>
     /// A Cosmos Db graph traversal source (g)
     /// </summary>
@@ -12,7 +12,7 @@ namespace Gremlin.Net.CosmosDb
         /// Spawns a <see cref="GraphTraversal{SType, EType}"/> off this graph traversal source and adds the addV step to
         /// that traversal.
         /// </summary>
-        GraphTraversal<Gremlin.Net.Structure.Vertex, Gremlin.Net.Structure.Vertex> AddV();
+        GraphTraversal<Net.Structure.Vertex, Net.Structure.Vertex> AddV();
 
         /// <summary>
         /// Spawns a <see cref="GraphTraversal{SType, EType}"/> off this graph traversal source and adds the addV step to

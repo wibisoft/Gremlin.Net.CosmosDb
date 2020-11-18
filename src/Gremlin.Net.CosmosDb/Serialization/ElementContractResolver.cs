@@ -22,26 +22,26 @@ namespace Gremlin.Net.CosmosDb.Serialization
             if (objectType == null)
                 throw new ArgumentNullException(nameof(objectType));
 
-            var contract = base.CreateObjectContract(objectType);
+            JsonObjectContract contract = base.CreateObjectContract(objectType);
 
-            if (TypeCache.Element.IsAssignableFrom(objectType))
+            if (typeof(Element).IsAssignableFrom(objectType))
             {
                 contract.Properties.Remove(PropertyNames.Label);
             }
 
-            if (TypeCache.IEdge.IsAssignableFrom(objectType))
+            if (typeof(IEdge).IsAssignableFrom(objectType))
             {
                 contract.Properties.Remove(PropertyNames.InVertexId);
                 contract.Properties.Remove(PropertyNames.InVertexLabel);
                 contract.Properties.Remove(PropertyNames.OutVertexId);
                 contract.Properties.Remove(PropertyNames.OutVertexLabel);
             }
-            else if (TypeCache.IVertex.IsAssignableFrom(objectType))
+            else if (typeof(IVertex).IsAssignableFrom(objectType))
             {
-                var edgeProps = new List<JsonProperty>();
-                foreach (var prop in contract.Properties)
+                List<JsonProperty> edgeProps = new List<JsonProperty>();
+                foreach (JsonProperty prop in contract.Properties)
                 {
-                    if (TypeCache.IEdge.IsAssignableFrom(prop.PropertyType))
+                    if (typeof(IEdge).IsAssignableFrom(prop.PropertyType))
                         edgeProps.Add(prop);
                 }
                 edgeProps.ForEach(p => contract.Properties.Remove(p));

@@ -3,6 +3,7 @@ using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using Newtonsoft.Json.Serialization;
 using System;
+using System.Collections.Generic;
 
 namespace Gremlin.Net.CosmosDb.Serialization
 {
@@ -16,10 +17,7 @@ namespace Gremlin.Net.CosmosDb.Serialization
         /// Gets a value indicating whether this <see cref="T:Newtonsoft.Json.JsonConverter"/> can write JSON.
         /// </summary>
         /// <value><c>true</c> if this <see cref="T:Newtonsoft.Json.JsonConverter"/> can write JSON; otherwise, <c>false</c>.</value>
-        public override bool CanWrite
-        {
-            get { return false; }
-        }
+        public override bool CanWrite => false;
 
         /// <summary>
         /// Determines whether this instance can convert the specified object type.
@@ -28,7 +26,7 @@ namespace Gremlin.Net.CosmosDb.Serialization
         /// <returns><c>true</c> if this instance can convert the specified object type; otherwise, <c>false</c>.</returns>
         public override bool CanConvert(Type objectType)
         {
-            return TypeCache.IVertex.IsAssignableFrom(objectType);
+            return typeof(IVertex).IsAssignableFrom(objectType);
         }
 
         /// <summary>
@@ -46,16 +44,16 @@ namespace Gremlin.Net.CosmosDb.Serialization
             if (reader == null)
                 throw new ArgumentNullException(nameof(reader));
 
-            var jo = JObject.Load(reader);
-            var propertiesObj = jo[PropertyNames.Properties] as JObject;
+            JObject jo = JObject.Load(reader);
+            JObject propertiesObj = jo[PropertyNames.Properties] as JObject;
             if (propertiesObj != null)
                 jo.Remove(PropertyNames.Properties);
-            var vertex = jo.ToObject(objectType);
+            object vertex = jo.ToObject(objectType);
 
             if (propertiesObj != null)
             {
-                var vertexContract = (JsonObjectContract)serializer.ContractResolver.ResolveContract(objectType);
-                var convertedProperties = ConvertPropertiesObject(propertiesObj, vertexContract);
+                JsonObjectContract vertexContract = (JsonObjectContract)serializer.ContractResolver.ResolveContract(objectType);
+                JObject convertedProperties = ConvertPropertiesObject(propertiesObj, vertexContract);
                 serializer.Populate(convertedProperties.CreateReader(), vertex);
             }
 
@@ -83,19 +81,19 @@ namespace Gremlin.Net.CosmosDb.Serialization
         /// <returns>Returns the converted object</returns>
         private static JObject ConvertPropertiesObject(JObject propertiesObj, JsonObjectContract targetContract)
         {
-            var converted = new JObject();
+            JObject converted = new JObject();
 
-            foreach (var key in propertiesObj)
+            foreach (KeyValuePair<string, JToken> key in propertiesObj)
             {
-                var propertyContract = targetContract.Properties.GetClosestMatchProperty(key.Key);
+                JsonProperty propertyContract = targetContract.Properties.GetClosestMatchProperty(key.Key);
                 if (propertyContract == null)
                     continue;
 
-                var value = key.Value as JArray;
+                JArray value = key.Value as JArray;
                 if (value == null)
                     continue;
 
-                var simplifiedValues = SimplifyArrayOfValues(value);
+                JArray simplifiedValues = SimplifyArrayOfValues(value);
                 converted[key.Key] = TypeHelper.IsScalar(propertyContract.PropertyType)
                     ? simplifiedValues.First
                     : simplifiedValues;
@@ -112,9 +110,9 @@ namespace Gremlin.Net.CosmosDb.Serialization
         /// <returns>Returns the simplified set of values</returns>
         private static JArray SimplifyArrayOfValues(JArray values)
         {
-            var simplified = new JArray();
+            JArray simplified = new JArray();
 
-            foreach (var valueObj in values)
+            foreach (JToken valueObj in values)
             {
                 simplified.Add(valueObj[PropertyNames.Value]);
             }

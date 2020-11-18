@@ -1,6 +1,7 @@
 ﻿using AutoFixture;
 using System;
 using System.Globalization;
+using System.Reflection;
 
 namespace Gremlin.Net.CosmosDb
 {
@@ -14,12 +15,7 @@ namespace Gremlin.Net.CosmosDb
         /// <summary>
         /// Gets the customization.
         /// </summary>
-        public virtual ICustomization Customization
-        {
-            get { return _customization; }
-        }
-
-        private readonly ICustomization _customization;
+        public virtual ICustomization Customization { get; }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="WithCustomizationAttribute"/> class.
@@ -30,15 +26,15 @@ namespace Gremlin.Net.CosmosDb
         public WithCustomizationAttribute(Type customizationType)
         {
             if (customizationType == null)
-                throw new ArgumentNullException("customizationType");
+                throw new ArgumentNullException(nameof(customizationType));
             if (!typeof(ICustomization).IsAssignableFrom(customizationType))
                 throw new ArgumentException(string.Format(
                             CultureInfo.CurrentCulture,
                             "{0} is not compatible with ICustomization. Please supply a Type which implements ICustomization.",
                             customizationType),
-                        "customizationType");
+                        nameof(customizationType));
 
-            var ctor = customizationType.GetConstructor(Type.EmptyTypes);
+            ConstructorInfo? ctor = customizationType.GetConstructor(Type.EmptyTypes);
             if (ctor == null)
             {
                 throw new ArgumentException(
@@ -46,10 +42,10 @@ namespace Gremlin.Net.CosmosDb
                         CultureInfo.CurrentCulture,
                         "{0} has no default constructor. Please supply a a Type that implements ICustomization and has a default constructor.",
                         customizationType),
-                    "customizationType");
+                    nameof(customizationType));
             }
 
-            _customization = (ICustomization)ctor.Invoke(null);
+            Customization = (ICustomization)ctor.Invoke(null);
         }
     }
 }

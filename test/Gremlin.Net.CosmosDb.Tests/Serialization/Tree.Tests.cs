@@ -108,7 +108,7 @@ namespace Gremlin.Net.CosmosDb.Serialization
         [Fact]
         private void TreeJsonConverter_deserializes_a_tree_that_includes_edges()
         {
-            var settings = new JsonSerializerSettings
+            JsonSerializerSettings settings = new JsonSerializerSettings
             {
                 Converters = new JsonConverter[]
                 {
@@ -122,7 +122,7 @@ namespace Gremlin.Net.CosmosDb.Serialization
                 DateTimeZoneHandling = DateTimeZoneHandling.Utc
             };
 
-            var tree = JsonConvert.DeserializeObject<Tree>(TEST_TREE, settings);
+            Tree tree = JsonConvert.DeserializeObject<Tree>(TEST_TREE, settings);
 
             tree.RootVertexNodes.Should().NotBeNullOrEmpty();
             tree.RootVertexNodes[0].Vertex.Properties.Should().ContainKeys("firstName", "lastName");
@@ -134,7 +134,7 @@ namespace Gremlin.Net.CosmosDb.Serialization
             tree.RootVertexNodes[0].EdgeNodes[0].VertexNode.Vertex.Label.Should().Be("product");
             tree.RootVertexNodes[0].EdgeNodes[0].VertexNode.Vertex.Properties.Should().ContainKeys("name", "price");
 
-            var test = tree.ToObject<Person>();
+            Person[] test = tree.ToObject<Person>();
 
             test.Length.Should().Be(1);
             test[0].FirstName.Should().Be("John");

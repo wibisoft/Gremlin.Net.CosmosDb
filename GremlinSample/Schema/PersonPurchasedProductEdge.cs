@@ -6,5 +6,6 @@ namespace GremlinSample.Schema
     public sealed class PersonPurchasedProductEdge : ManyToManyEdge<PersonVertex, ProductVertex>
     {
         public string Id { get; set; }
+        public string Name { get; set; }
     }
 }

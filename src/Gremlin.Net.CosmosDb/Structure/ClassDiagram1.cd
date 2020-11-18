@@ -1,0 +1,184 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ClassDiagram MajorVersion="1" MinorVersion="1">
+  <Class Name="Gremlin.Net.CosmosDb.Structure.Edge">
+    <Position X="12" Y="6" Width="2.25" />
+    <TypeIdentifier>
+      <HashCode>CAAAAAAAAAAAEAAcABAQAAAAAAAAAAAAAAAAAAACACA=</HashCode>
+      <FileName>Structure\Edge.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Gremlin.Net.CosmosDb.Structure.Element">
+    <Position X="13.5" Y="2.75" Width="2.25" />
+    <TypeIdentifier>
+      <HashCode>AAACAAAAkAAAAAQAAAAAAAAAAAAAAAAAACAAAAAAAAA=</HashCode>
+      <FileName>Structure\Element.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Gremlin.Net.CosmosDb.Structure.GraphResult">
+    <Position X="5.75" Y="0.75" Width="2.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAQggAAAAAEAAAAAAAAQEAAAACAAAIAAAAAAAAgA=</HashCode>
+      <FileName>Structure\GraphResult.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Gremlin.Net.CosmosDb.Structure.GraphResult&lt;T&gt;">
+    <Position X="5.75" Y="5.5" Width="2.25" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAABAAAAAAAAQAAAAAAAAEAAAAAAAAAAA=</HashCode>
+      <FileName>Structure\GraphResult.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" />
+  </Class>
+  <Class Name="Gremlin.Net.CosmosDb.Structure.LabelAttribute" Collapsed="true">
+    <Position X="18.25" Y="0.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAQAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Structure\LabelAttribute.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Gremlin.Net.CosmosDb.Structure.LabelNameResolver" Collapsed="true">
+    <Position X="20" Y="0.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAQAAAAgAAAAAAAACAAAAAAAAAA=</HashCode>
+      <FileName>Structure\LabelNameResolver.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Gremlin.Net.CosmosDb.Structure.ManyToManyEdge&lt;TOutV, TInV&gt;" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="21.75" Y="0.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAQAAAAAAQAAAAAAAAAAAABACA=</HashCode>
+      <FileName>Structure\ManyToManyEdge.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="Gremlin.Net.CosmosDb.Structure.ManyToOneEdge&lt;TOutV, TInV&gt;" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="23.5" Y="0.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAQAAAAAAQAAAAAAAAAAAAAACA=</HashCode>
+      <FileName>Structure\ManyToOneEdge.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="Gremlin.Net.CosmosDb.Structure.OneToManyEdge&lt;TOutV, TInV&gt;" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="18.25" Y="1.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAQAAAAAAAAAAAAAAAAAAABACA=</HashCode>
+      <FileName>Structure\OneToManyEdge.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="Gremlin.Net.CosmosDb.Structure.OneToOneEdge&lt;TOutV, TInV&gt;" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="20" Y="1.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAQAAAAAAAAAAAAAAAAAAAAACA=</HashCode>
+      <FileName>Structure\OneToOneEdge.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="Gremlin.Net.CosmosDb.Structure.PartitionKeyIdPair" Collapsed="true">
+    <Position X="21.75" Y="1.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAACAABAAAAAAAAEAAAAAAAAAAQAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Structure\PartitionKeyIdPair.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Gremlin.Net.CosmosDb.Structure.Property" Collapsed="true">
+    <Position X="23.5" Y="1.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAACAAAAEAAAAAAAAAAAAAAAAAAAAAAAAAAgAAAAAAA=</HashCode>
+      <FileName>Structure\Property.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Gremlin.Net.CosmosDb.Structure.PropertyNames" Collapsed="true">
+    <Position X="18.25" Y="2.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAACAAAAEAAAAAAAAAABAAAABAAAAAAAAQAgACACCAA=</HashCode>
+      <FileName>Structure\PropertyNames.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Gremlin.Net.CosmosDb.Structure.Tree" Collapsed="true">
+    <Position X="20" Y="2.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAQABAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Structure\Tree.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Gremlin.Net.CosmosDb.Structure.TreeEdgeIntermediateNode" Collapsed="true">
+    <Position X="21.75" Y="2.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Structure\TreeEdgeIntermediateNode.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Gremlin.Net.CosmosDb.Structure.TreeEdgeNode" Collapsed="true">
+    <Position X="23.5" Y="2.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAEAAAAAAAAAEAABAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Structure\TreeEdgeNode.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Gremlin.Net.CosmosDb.Structure.TreeVertexIntermediateNode" Collapsed="true">
+    <Position X="18.25" Y="3.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Structure\TreeVertexIntermediateNode.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Gremlin.Net.CosmosDb.Structure.TreeVertexNode" Collapsed="true">
+    <Position X="20" Y="3.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAABAAAEAAAAAAAACAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Structure\TreeVertexNode.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Gremlin.Net.CosmosDb.Structure.Vertex">
+    <Position X="15" Y="6" Width="2.25" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAEAAUABAAAAAAAAAAAAAAAAAAAAACAAA=</HashCode>
+      <FileName>Structure\Vertex.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Gremlin.Net.CosmosDb.Structure.VertexPropertyValue" Collapsed="true">
+    <Position X="21.75" Y="3.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAACAAAAAAAAEAAQAAAAAAAAAAAAAAAAAAAgAAACAAA=</HashCode>
+      <FileName>Structure\VertexPropertyValue.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Interface Name="Gremlin.Net.CosmosDb.Structure.IEdge">
+    <Position X="9" Y="0.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Structure\IEdge.cs</FileName>
+    </TypeIdentifier>
+  </Interface>
+  <Interface Name="Gremlin.Net.CosmosDb.Structure.IEdge&lt;TOutV, TInV&gt;">
+    <Position X="11" Y="2.75" Width="1.75" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Structure\IEdge.cs</FileName>
+    </TypeIdentifier>
+  </Interface>
+  <Interface Name="Gremlin.Net.CosmosDb.Structure.IHasInV&lt;TInV&gt;">
+    <Position X="14.75" Y="0.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Structure\IHasInV.cs</FileName>
+    </TypeIdentifier>
+  </Interface>
+  <Interface Name="Gremlin.Net.CosmosDb.Structure.IHasOutV&lt;TOutV&gt;">
+    <Position X="12.25" Y="0.75" Width="1.75" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Structure\IHasOutV.cs</FileName>
+    </TypeIdentifier>
+  </Interface>
+  <Interface Name="Gremlin.Net.CosmosDb.Structure.IVertex" Collapsed="true">
+    <Position X="18.25" Y="5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Structure\IVertex.cs</FileName>
+    </TypeIdentifier>
+  </Interface>
+  <Font Name="Segoe UI" Size="9" />
+</ClassDiagram>

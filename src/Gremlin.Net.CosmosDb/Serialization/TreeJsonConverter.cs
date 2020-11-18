@@ -45,7 +45,7 @@ namespace Gremlin.Net.CosmosDb.Serialization
         /// <returns>The object value.</returns>
         public override object ReadJson(JsonReader reader, Type objectType, object existingValue, JsonSerializer serializer)
         {
-            var deserializer = _deserializers[objectType];
+            Func<JsonReader, JsonSerializer, object> deserializer = _deserializers[objectType];
 
             return deserializer(reader, serializer);
         }
@@ -60,9 +60,9 @@ namespace Gremlin.Net.CosmosDb.Serialization
 
         private static object ReadTree(JsonReader reader, JsonSerializer serializer)
         {
-            var map = serializer.Deserialize<TreeVertexIntermediateNode>(reader);
+            TreeVertexIntermediateNode map = serializer.Deserialize<TreeVertexIntermediateNode>(reader);
 
-            var vertices = map.Values.ToArray();
+            TreeVertexNode[] vertices = map.Values.ToArray();
 
             return new Tree
             {
@@ -72,11 +72,11 @@ namespace Gremlin.Net.CosmosDb.Serialization
 
         private static object ReadTreeEdgeNode(JsonReader reader, JsonSerializer serializer)
         {
-            var jObj = JObject.ReadFrom(reader);
-            var edge = jObj["key"].ToObject<Edge>(serializer);
-            var vertex = jObj["value"].ToObject<TreeVertexIntermediateNode>(serializer);
+            JToken jObj = JToken.ReadFrom(reader);
+            Edge edge = jObj["key"].ToObject<Edge>(serializer);
+            TreeVertexIntermediateNode vertex = jObj["value"].ToObject<TreeVertexIntermediateNode>(serializer);
 
-            var element = new TreeEdgeNode
+            TreeEdgeNode element = new TreeEdgeNode
             {
                 Edge = edge,
                 VertexNode = vertex.Values.FirstOrDefault()
@@ -87,11 +87,11 @@ namespace Gremlin.Net.CosmosDb.Serialization
 
         private static object ReadTreeVertexNode(JsonReader reader, JsonSerializer serializer)
         {
-            var jObj = JObject.ReadFrom(reader);
-            var vertex = jObj["key"].ToObject<Vertex>(serializer);
-            var edges = jObj["value"].ToObject<TreeEdgeIntermediateNode>(serializer);
+            JToken jObj = JToken.ReadFrom(reader);
+            Vertex vertex = jObj["key"].ToObject<Vertex>(serializer);
+            TreeEdgeIntermediateNode edges = jObj["value"].ToObject<TreeEdgeIntermediateNode>(serializer);
 
-            var element = new TreeVertexNode
+            TreeVertexNode element = new TreeVertexNode
             {
                 Vertex = vertex,
                 EdgeNodes = edges.Select(e => e.Value).ToArray()

@@ -11,12 +11,9 @@ namespace Gremlin.Net.CosmosDb
     internal sealed class SchemaBoundTraversal<S, E> : ISchemaBoundTraversal<S, E>
     {
         /// <summary>
-        /// Gets the bytecode.
+        /// Gets the byteCode.
         /// </summary>
-        public Bytecode Bytecode
-        {
-            get { return _traversal.Bytecode; }
-        }
+        public Bytecode Bytecode => _traversal.Bytecode;
 
         /// <summary>
         /// Gets the current.
@@ -28,8 +25,8 @@ namespace Gremlin.Net.CosmosDb
         /// </summary>
         public ITraversalSideEffects SideEffects
         {
-            get { return _traversal.SideEffects; }
-            set { _traversal.SideEffects = value; }
+            get => _traversal.SideEffects;
+            set => _traversal.SideEffects = value;
         }
 
         /// <summary>
@@ -37,8 +34,8 @@ namespace Gremlin.Net.CosmosDb
         /// </summary>
         public IEnumerable<Traverser> Traversers
         {
-            get { return _traversal.Traversers; }
-            set { _traversal.Traversers = value; }
+            get => _traversal.Traversers;
+            set => _traversal.Traversers = value;
         }
 
         private readonly GraphTraversal<S, E> _traversal;
@@ -46,10 +43,10 @@ namespace Gremlin.Net.CosmosDb
         /// <summary>
         /// Initializes a new instance of the <see cref="SchemaBoundTraversal{S, E}"/> class.
         /// </summary>
-        /// <param name="bytecode">The bytecode.</param>
-        public SchemaBoundTraversal(Bytecode bytecode)
+        /// <param name="byteCode">The byte-code.</param>
+        public SchemaBoundTraversal(Bytecode byteCode)
         {
-            _traversal = new GraphTraversal<S, E>(new ITraversalStrategy[0], bytecode);
+            _traversal = new GraphTraversal<S, E>(new ITraversalStrategy[0], byteCode);
         }
 
         /// <summary>

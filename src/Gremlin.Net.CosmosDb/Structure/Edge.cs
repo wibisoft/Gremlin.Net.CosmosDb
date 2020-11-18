@@ -42,8 +42,8 @@ namespace Gremlin.Net.CosmosDb.Structure
         [JsonProperty(PropertyNames.Properties)]
         public virtual IDictionary<string, object> Properties
         {
-            get { return _properties; }
-            set { _properties = value ?? new Dictionary<string, object>(); }
+            get => _properties;
+            set => _properties = value ?? new Dictionary<string, object>();
         }
 
         private IDictionary<string, object> _properties = new Dictionary<string, object>();
@@ -62,7 +62,7 @@ namespace Gremlin.Net.CosmosDb.Structure
         public T ToObject<T>()
             where T : class
         {
-            return ToObject<T>(new JsonSerializerSettings());
+            return (T)ToObject(typeof(T));
         }
 
         /// <summary>
@@ -81,12 +81,22 @@ namespace Gremlin.Net.CosmosDb.Structure
         /// Converts this edge to an object of type <paramref name="objectType"/>.
         /// </summary>
         /// <param name="objectType">The type of object to convert to</param>
+        /// <returns>Returns the converted object</returns>
+        public object ToObject(Type objectType)
+        {
+	        return ToObject(objectType, null);
+        }
+
+        /// <summary>
+        /// Converts this edge to an object of type <paramref name="objectType"/>.
+        /// </summary>
+        /// <param name="objectType">The type of object to convert to</param>
         /// <param name="serializerSettings">The serializer settings.</param>
         /// <returns>Returns the converted object</returns>
-        public object ToObject(Type objectType, JsonSerializerSettings serializerSettings = null)
+        public object ToObject(Type objectType, JsonSerializerSettings serializerSettings)
         {
-            var serializer = JsonSerializer.Create(serializerSettings ?? new JsonSerializerSettings());
-            var properties = new Dictionary<string, object>(Properties)
+	        JsonSerializer serializer = CreateJsonSerializer(serializerSettings);
+	        Dictionary<string, object> properties = new Dictionary<string, object>(Properties)
             {
                 [PropertyNames.Id] = Id,
                 [PropertyNames.InVertexId] = InV,

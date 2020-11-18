@@ -22,8 +22,8 @@ namespace Gremlin.Net.CosmosDb.Structure
         [JsonProperty(PropertyNames.Properties)]
         public IDictionary<string, object> Properties
         {
-            get { return _properties; }
-            set { _properties = value ?? new Dictionary<string, object>(); }
+            get => _properties;
+            set => _properties = value ?? new Dictionary<string, object>();
         }
 
         /// <summary>

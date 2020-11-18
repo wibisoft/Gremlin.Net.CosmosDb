@@ -25,9 +25,9 @@ namespace Gremlin.Net.CosmosDb.Structure
         public T[] ToObject<T>(IEnumerable<ITreeConnector> treeConnectors = null)
             where T : IVertex
         {
-            var parser = new TreeParser(treeConnectors ?? Enumerable.Empty<ITreeConnector>());
+            TreeParser parser = new TreeParser(treeConnectors ?? Enumerable.Empty<ITreeConnector>());
 
-            var vertices = RootVertexNodes.Select(n => parser.GetVertex(n, typeof(T))).Cast<T>();
+            IEnumerable<T> vertices = RootVertexNodes.Select(n => parser.GetVertex(n, typeof(T))).Cast<T>();
 
             return vertices.ToArray();
         }
@@ -50,13 +50,13 @@ namespace Gremlin.Net.CosmosDb.Structure
 
             public IEdge GetEdge(TreeEdgeNode edgeNode, Type edgeType, bool directionIsOut)
             {
-                var edge = (IEdge)edgeNode.Edge.ToObject(edgeType);
+                IEdge edge = (IEdge)edgeNode.Edge.ToObject(edgeType);
 
-                var nextVertexType = directionIsOut ? GetEdgeInType(edgeType) : GetEdgeOutType(edgeType);
+                Type nextVertexType = directionIsOut ? GetEdgeInType(edgeType) : GetEdgeOutType(edgeType);
 
-                var vertex = GetVertex(edgeNode.VertexNode, nextVertexType);
+                IVertex vertex = GetVertex(edgeNode.VertexNode, nextVertexType);
 
-                foreach (var connector in _vertexConnectors)
+                foreach (IVertexConnector connector in _vertexConnectors)
                 {
                     if (connector.ConnectVertex(edge, vertex)) continue;
                 }
@@ -66,28 +66,28 @@ namespace Gremlin.Net.CosmosDb.Structure
 
             public IVertex GetVertex(TreeVertexNode vertexNode, Type vertexType)
             {
-                var vertexObject = (IVertex)vertexNode.Vertex.ToObject(vertexType);
-                var vertexLabel = LabelNameResolver.GetLabelName(vertexType);
+                IVertex vertexObject = (IVertex)vertexNode.Vertex.ToObject(vertexType);
+                string vertexLabel = vertexType.GetLabelName();
 
-                var edgeProps = GetEdgeProps(vertexType);
+                PropertyInfo[] edgeProps = GetEdgeProps(vertexType);
 
-                foreach (var edgeProp in edgeProps)
+                foreach (PropertyInfo edgeProp in edgeProps)
                 {
-                    var label = LabelNameResolver.GetLabelName(edgeProp);
+                    string label = edgeProp.GetLabelName();
 
-                    var edgeNodes = vertexNode.EdgeNodes.Where(e => e.Edge.Label == label).ToList();
-                    var inV = GetEdgeInType(edgeProp.PropertyType);
-                    var inVLabel = LabelNameResolver.GetLabelName(inV);
-                    var outV = GetEdgeOutType(edgeProp.PropertyType);
-                    var outVLabel = LabelNameResolver.GetLabelName(outV);
+                    List<TreeEdgeNode> edgeNodes = vertexNode.EdgeNodes.Where(e => e.Edge.Label == label).ToList();
+                    Type inV = GetEdgeInType(edgeProp.PropertyType);
+                    string inVLabel = inV.GetLabelName();
+                    Type outV = GetEdgeOutType(edgeProp.PropertyType);
+                    string outVLabel = outV.GetLabelName();
 
-                    foreach (var node in edgeNodes)
+                    foreach (TreeEdgeNode node in edgeNodes)
                     {
-                        var isOut = node.Edge.OutVLabel == outVLabel;
+                        bool isOut = node.Edge.OutVLabel == outVLabel;
 
-                        var edge = GetEdge(node, edgeProp.PropertyType, isOut);
+                        IEdge edge = GetEdge(node, edgeProp.PropertyType, isOut);
 
-                        foreach (var connector in _edgeConnectors)
+                        foreach (IEdgeConnector connector in _edgeConnectors)
                         {
                             if (connector.ConnectEdge(vertexObject, edge, edgeProp)) continue;
                         }
@@ -97,11 +97,11 @@ namespace Gremlin.Net.CosmosDb.Structure
                 return vertexObject;
             }
 
-            private static Type GetEdgeInType(Type e) => e.GetInterfaces().FirstOrDefault(t => t.IsGenericType && t.GetGenericTypeDefinition() == TypeCache.IHasInV).GetGenericArguments()[0];
+            private static Type GetEdgeInType(Type e) => e.GetInterfaces().FirstOrDefault(t => t.IsGenericType && t.GetGenericTypeDefinition() == typeof(IHasInV<>)).GetGenericArguments()[0];
 
-            private static Type GetEdgeOutType(Type e) => e.GetInterfaces().FirstOrDefault(t => t.IsGenericType && t.GetGenericTypeDefinition() == TypeCache.IHasOutV).GetGenericArguments()[0];
+            private static Type GetEdgeOutType(Type e) => e.GetInterfaces().FirstOrDefault(t => t.IsGenericType && t.GetGenericTypeDefinition() == typeof(IHasOutV<>)).GetGenericArguments()[0];
 
-            private static PropertyInfo[] GetEdgeProps(Type v) => v.GetProperties().Where(p => TypeCache.IEdge.IsAssignableFrom(p.PropertyType)).ToArray();
+            private static PropertyInfo[] GetEdgeProps(Type v) => v.GetProperties().Where(p => typeof(IEdge).IsAssignableFrom(p.PropertyType)).ToArray();
         }
     }
 }

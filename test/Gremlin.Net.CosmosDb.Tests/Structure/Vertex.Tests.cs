@@ -20,7 +20,7 @@ namespace Gremlin.Net.CosmosDb.Structure
             sut.Properties[nameof(SomeObject.StringProperty)] = new[] { new VertexPropertyValue { Value = expected.StringProperty } };
             sut.Properties[nameof(SomeObject.StringEnumerableProperty)] = expected.StringEnumerableProperty.Select(v => new VertexPropertyValue { Value = v }).ToList();
 
-            var result = sut.ToObject<SomeObject>();
+            SomeObject result = sut.ToObject<SomeObject>();
 
             expected.Should().BeEquivalentTo(result);
         }
@@ -29,32 +29,32 @@ namespace Gremlin.Net.CosmosDb.Structure
         {
             public IEnumerable<bool> BooleanEnumerableProperty
             {
-                get { return _booleans; }
-                set { _booleans = value.ToList(); }
+                get => _booleans;
+                set => _booleans = value.ToList();
             }
 
             public bool BooleanProperty { get; set; }
 
             public IEnumerable<decimal> DecimalEnumerableProperty
             {
-                get { return _decimals; }
-                set { _decimals = value.ToList(); }
+                get => _decimals;
+                set => _decimals = value.ToList();
             }
 
             public decimal DecimalProperty { get; set; }
 
             public IEnumerable<int> IntegerEnumerableProperty
             {
-                get { return _integers; }
-                set { _integers = value.ToList(); }
+                get => _integers;
+                set => _integers = value.ToList();
             }
 
             public int IntegerProperty { get; set; }
 
             public IEnumerable<string> StringEnumerableProperty
             {
-                get { return _strings; }
-                set { _strings = value.ToList(); }
+                get => _strings;
+                set => _strings = value.ToList();
             }
 
             public string StringProperty { get; set; }

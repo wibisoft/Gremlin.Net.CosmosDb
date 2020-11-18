@@ -1,70 +1,80 @@
-using Gremlin.Net.CosmosDb;
-using GremlinSample.Schema;
-using Newtonsoft.Json;
-using System;
-using System.Threading.Tasks;
-
 namespace GremlinSample
 {
-    internal class Program
-    {
-        internal static async Task Main()
-        {
-            using (var graphClient = new GraphClient("your-gremlin-host-name", "your-db-name", "your-graph-name", "your-access-key"))
-            {
-                var g = graphClient.CreateTraversalSource();
+	using Gremlin.Net.CosmosDb;
+	using Schema;
+	using Newtonsoft.Json;
+	using System;
+	using System.Threading.Tasks;
+	using Gremlin.Net.CosmosDb.Structure;
 
-                //add vertices/edges using strongly-typed objects
-                var personV = new PersonVertex
-                {
-                    Ages = new[] { 4, 6, 23 },
-                    Id = "person-12345",
-                    Name = "my name"
-                };
-                var purchasedE = new PersonPurchasedProductEdge
-                {
-                    Id = "person-12345_purchased_product-12345"
-                };
-                var productV = new ProductVertex
-                {
-                    Id = "product-12345"
-                };
-                var test = g.AddV(personV).As("person")
-                            .AddV(productV).As("product")
-                            .AddE(purchasedE).From("person").To("product");
+	internal class Program
+	{
+		internal static async Task Main()
+		{
+			using (GraphClient graphClient = new GraphClient("archgraph1.gremlin.cosmos.azure.com", "organization", "test", "rtiwtIxpuSPMxXEy8GEvHHYzrOHg931OdXmTVzlo4Jjo2eeG5d2FOuWpxSitkMGXz3YcOEg8zKBklpViUR2pNg=="))
+			{
+				IGraphTraversalSource g = graphClient.CreateTraversalSource();
 
-                Console.WriteLine(test.ToGremlinQuery());
+				//add vertices/edges using strongly-typed objects
+				PersonVertex personV = new PersonVertex
+				{
+					Ages = new[] { 4, 6, 23 },
+					Id = "person-12345",
+					Name = "my person"
+				};
+				ProductVertex productV = new ProductVertex
+				{
+					Id = "product-12345",
+					Name = "my product"
+				};
+				PersonPurchasedProductEdge purchasedE = new PersonPurchasedProductEdge
+				{
+					Id = "person-12345_purchased_product-12345",
+					Name = "my person"
+				};
 
-                //traverse vertices/edges with strongly-typed objects
-                var query = g.V("1").Cast<PersonVertex>()
-                             .Out(s => s.Purchases)
-                             .InE(s => s.People)
-                             .OutV()
-                             .Property(v => v.Name, "test")
-                             .Property(v => v.Ages, new[] { 5, 6 })
-                             .Property(v => v.Ages, 7);
-                Console.WriteLine(query.ToGremlinQuery());
-                var response = await graphClient.QueryAsync(query);
+				ISchemaBoundTraversal<object, PersonPurchasedProductEdge> test = g
+					.AddV(personV).As("person")
+					.AddV(productV).As("product")
+					.AddE(purchasedE).From("person").To("product");
 
-                Console.WriteLine();
-                Console.WriteLine("Response status:");
+				Console.WriteLine(test.ToGremlinQuery());
 
-                Console.WriteLine($"Code: {response.StatusCode}");
-                Console.WriteLine($"RU Cost: {response.TotalRequestCharge}");
+				await graphClient.ExecuteAsync(test);
 
-                Console.WriteLine();
-                Console.WriteLine("Response:");
-                foreach (var result in response)
-                {
-                    var json = JsonConvert.SerializeObject(result, Formatting.Indented);
+				//traverse vertices/edges with strongly-typed objects
+				ISchemaBoundTraversal<object, PersonVertex> query = g
+					.V("1")
+						.Cast<PersonVertex>()
+					.Out(_ => _.Purchases)
+					.InE(_ => _.People)
+					.OutV()
+					.Property(_ => _.Name, "test")
+					.Property(_ => _.Ages, new[] { 5, 6 })
+					.Property(_ => _.Ages, 7);
 
-                    Console.WriteLine(json);
-                }
-            }
+				Console.WriteLine(query.ToGremlinQuery());
+				GraphResult<PersonVertex> response2 = await graphClient.QueryAsync(query);
 
-            Console.WriteLine();
-            Console.WriteLine("All done...");
-            Console.ReadKey();
-        }
-    }
+				Console.WriteLine();
+				Console.WriteLine("Response status:");
+
+				Console.WriteLine($"Code: {response2.StatusCode}");
+				Console.WriteLine($"RU Cost: {response2.TotalRequestCharge}");
+
+				Console.WriteLine();
+				Console.WriteLine("Response:");
+				foreach (PersonVertex result in response2)
+				{
+					string json = JsonConvert.SerializeObject(result, Formatting.Indented);
+
+					Console.WriteLine(json);
+				}
+			}
+
+			Console.WriteLine();
+			Console.WriteLine("All done...");
+			Console.ReadKey();
+		}
+	}
 }

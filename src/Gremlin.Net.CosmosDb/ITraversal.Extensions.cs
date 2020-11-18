@@ -23,7 +23,7 @@ namespace Gremlin.Net.CosmosDb
         public static ISchemaBoundTraversal<object, TEdge> AddE<TEdge>(this ITraversal traversal)
             where TEdge : IEdge
         {
-            var label = LabelNameResolver.GetLabelName(typeof(TEdge));
+            string label = typeof(TEdge).GetLabelName();
 
             return traversal.AsGraphTraversal().AddE(label).AsSchemaBound<object, TEdge>();
         }
@@ -52,7 +52,7 @@ namespace Gremlin.Net.CosmosDb
         public static ISchemaBoundTraversal<object, TEdge> AddE<TEdge>(this ITraversal traversal, TEdge edge, JsonSerializerSettings serializationSettings)
             where TEdge : IEdge
         {
-            var label = LabelNameResolver.GetLabelName(typeof(TEdge));
+            string label = typeof(TEdge).GetLabelName();
             var t = traversal.AsGraphTraversal().AddE(label);
 
             t = TraversalHelper.AddObjectProperties(t, edge, serializationSettings);
@@ -69,7 +69,7 @@ namespace Gremlin.Net.CosmosDb
         public static ISchemaBoundTraversal<object, TVertex> AddV<TVertex>(this ITraversal traversal)
             where TVertex : IVertex
         {
-            var label = LabelNameResolver.GetLabelName(typeof(TVertex));
+            string label = typeof(TVertex).GetLabelName();
 
             return traversal.AsGraphTraversal().AddV(label).AsSchemaBound<object, TVertex>();
         }
@@ -98,7 +98,7 @@ namespace Gremlin.Net.CosmosDb
         public static ISchemaBoundTraversal<object, TVertex> AddV<TVertex>(this ITraversal traversal, TVertex vertex, JsonSerializerSettings serializationSettings)
             where TVertex : IVertex
         {
-            var label = LabelNameResolver.GetLabelName(typeof(TVertex));
+            string label = typeof(TVertex).GetLabelName();
             var t = traversal.AsGraphTraversal().AddV(label);
 
             t = TraversalHelper.AddObjectProperties(t, vertex, serializationSettings);
@@ -494,8 +494,8 @@ namespace Gremlin.Net.CosmosDb
         /// <returns>Returns the string query</returns>
         public static string ToGremlinQuery(this ITraversal traversal)
         {
-            var sb = new StringBuilder();
-            using (var serializer = new GremlinQuerySerializer(new StringWriter(sb)))
+            StringBuilder sb = new StringBuilder();
+            using (GremlinQuerySerializer serializer = new GremlinQuerySerializer(new StringWriter(sb)))
             {
                 serializer.Serialize(traversal);
             }

@@ -1,5 +1,6 @@
 ﻿using Gremlin.Net.CosmosDb.Serialization;
 using Gremlin.Net.CosmosDb.Structure;
+using Gremlin.Net.Process.Traversal;
 using Newtonsoft.Json;
 
 namespace Gremlin.Net.CosmosDb
@@ -18,7 +19,7 @@ namespace Gremlin.Net.CosmosDb
         public static ISchemaBoundTraversal<object, TVertex> AddV<TVertex>(this IGraphTraversalSource graphTraversalSource)
             where TVertex : IVertex
         {
-            var label = LabelNameResolver.GetLabelName(typeof(TVertex));
+            string label = typeof(TVertex).GetLabelName();
 
             return graphTraversalSource.AddV(label).AsSchemaBound<object, TVertex>();
         }
@@ -47,8 +48,8 @@ namespace Gremlin.Net.CosmosDb
         public static ISchemaBoundTraversal<object, TVertex> AddV<TVertex>(this IGraphTraversalSource graphTraversalSource, TVertex vertex, JsonSerializerSettings serializationSettings)
             where TVertex : IVertex
         {
-            var label = LabelNameResolver.GetLabelName(typeof(TVertex));
-            var traversal = graphTraversalSource.AddV(label);
+            string label = typeof(TVertex).GetLabelName();
+            GraphTraversal<Net.Structure.Vertex, Net.Structure.Vertex> traversal = graphTraversalSource.AddV(label);
 
             traversal = TraversalHelper.AddObjectProperties(traversal, vertex, serializationSettings);
 
@@ -64,8 +65,8 @@ namespace Gremlin.Net.CosmosDb
         /// <returns>Returns the resulting traversal</returns>
         public static ISchemaBoundTraversal<Edge, TEdge> E<TEdge>(this IGraphTraversalSource graphTraversalSource, params object[] edgeIds)
         {
-            var label = LabelNameResolver.GetLabelName(typeof(TEdge));
-            var traversal = graphTraversalSource.E(edgeIds).HasLabel(label);
+            string label = typeof(TEdge).GetLabelName();
+            GraphTraversal<Net.Structure.Edge, Net.Structure.Edge> traversal = graphTraversalSource.E(edgeIds).HasLabel(label);
             return traversal.AsSchemaBound<Edge, TEdge>();
         }
 
@@ -77,8 +78,8 @@ namespace Gremlin.Net.CosmosDb
         /// <returns>Returns the resulting traversal</returns>
         public static ISchemaBoundTraversal<Vertex, TVertex> V<TVertex>(this IGraphTraversalSource graphTraversalSource)
         {
-            var label = LabelNameResolver.GetLabelName(typeof(TVertex));
-            var traversal = graphTraversalSource.V().HasLabel(label);
+            string label = typeof(TVertex).GetLabelName();
+            GraphTraversal<Net.Structure.Vertex, Net.Structure.Vertex> traversal = graphTraversalSource.V().HasLabel(label);
             return traversal.AsSchemaBound<Vertex, TVertex>();
         }
 
@@ -91,8 +92,8 @@ namespace Gremlin.Net.CosmosDb
         /// <returns>Returns the resulting traversal</returns>
         public static ISchemaBoundTraversal<Vertex, TVertex> V<TVertex>(this IGraphTraversalSource graphTraversalSource, params object[] vertexIds)
         {
-            var label = LabelNameResolver.GetLabelName(typeof(TVertex));
-            var traversal = graphTraversalSource.V(vertexIds).HasLabel(label);
+            string label = typeof(TVertex).GetLabelName();
+            GraphTraversal<Net.Structure.Vertex, Net.Structure.Vertex> traversal = graphTraversalSource.V(vertexIds).HasLabel(label);
             return traversal.AsSchemaBound<Vertex, TVertex>();
         }
 
@@ -105,8 +106,8 @@ namespace Gremlin.Net.CosmosDb
         /// <returns>Returns the resulting traversal</returns>
         public static ISchemaBoundTraversal<Vertex, TVertex> V<TVertex>(this IGraphTraversalSource graphTraversalSource, params PartitionKeyIdPair[] partitionKeyIdPairs)
         {
-            var label = LabelNameResolver.GetLabelName(typeof(TVertex));
-            var traversal = graphTraversalSource.V(partitionKeyIdPairs).HasLabel(label);
+            string label = typeof(TVertex).GetLabelName();
+            GraphTraversal<Net.Structure.Vertex, Net.Structure.Vertex> traversal = graphTraversalSource.V(partitionKeyIdPairs).HasLabel(label);
             return traversal.AsSchemaBound<Vertex, TVertex>();
         }
     }

@@ -147,8 +147,8 @@ namespace Gremlin.Net.CosmosDb
         /// <exception cref="ArgumentNullException">traversal</exception>
         public static async Task<GraphResult<T>> QueryAsync<T>(this IGraphClient graphClient, string gremlinQuery, JsonSerializerSettings serializerSettings)
         {
-            var result = await graphClient.QueryAsync(gremlinQuery);
-            var serializer = JsonSerializer.Create(serializerSettings);
+            GraphResult result = await graphClient.QueryAsync(gremlinQuery);
+            JsonSerializer serializer = JsonSerializer.Create(serializerSettings);
 
             return result.ApplyType<T>(serializer);
         }
@@ -197,7 +197,7 @@ namespace Gremlin.Net.CosmosDb
             if (traversal == null)
                 throw new ArgumentNullException(nameof(traversal));
 
-            var gremlinQuery = traversal.ToGremlinQuery();
+            string gremlinQuery = traversal.ToGremlinQuery();
 
             return graphClient.QueryAsync<T>(gremlinQuery, serializerSettings);
         }

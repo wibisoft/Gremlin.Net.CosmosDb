@@ -8,7 +8,7 @@
         /// <summary>
         /// Gets the raw string value.
         /// </summary>
-        public string Value { get; private set; }
+        public string Value { get; }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="GroovyString"/> class.
@@ -25,7 +25,7 @@
         /// <returns>A <see cref="System.String"/> that represents this instance.</returns>
         public override string ToString()
         {
-            return Value?.ToString();
+            return Value;
         }
     }
 }

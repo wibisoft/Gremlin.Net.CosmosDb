@@ -99,8 +99,8 @@ namespace Gremlin.Net.CosmosDb.Serialization
         /// <param name="startAnonTraversal">true indicates that we're starting an anonymous traversal</param>
         private void Serialize(Bytecode bytecode, bool startAnonTraversal)
         {
-            var first = true;
-            foreach (var instr in bytecode.SourceInstructions)
+            bool first = true;
+            foreach (Instruction instr in bytecode.SourceInstructions)
             {
                 if (!first)
                     _writer.Write('.');
@@ -111,7 +111,7 @@ namespace Gremlin.Net.CosmosDb.Serialization
                 startAnonTraversal = false;
             }
 
-            foreach (var instr in bytecode.StepInstructions)
+            foreach (Instruction instr in bytecode.StepInstructions)
             {
                 if (!first)
                 {
@@ -197,7 +197,7 @@ namespace Gremlin.Net.CosmosDb.Serialization
             _writer.Write('(');
             if (predicate.Value != null)
             {
-                var predicateValues = predicate.Value as IEnumerable<dynamic>;
+                IEnumerable<dynamic> predicateValues = predicate.Value as IEnumerable<dynamic>;
                 if (predicateValues?.Any() ?? false)
                     SerializeListWithCommas(predicateValues);
                 else if (predicate.Value is ITraversal traversal)
@@ -214,7 +214,7 @@ namespace Gremlin.Net.CosmosDb.Serialization
         /// <param name="obj">The object.</param>
         private void Serialize(object obj)
         {
-            var serializedObj = JsonConvert.SerializeObject(obj, Formatting.None, _serializerSettings);
+            string serializedObj = JsonConvert.SerializeObject(obj, Formatting.None, _serializerSettings);
 
             //make sure objects and arrays are serialized as string values
             //double-escape double quoted values that could be serialized inside the object as property keys/values
@@ -252,8 +252,8 @@ namespace Gremlin.Net.CosmosDb.Serialization
         /// <param name="list">The list.</param>
         private void SerializeListWithCommas(IEnumerable<dynamic> list)
         {
-            var addComma = false;
-            foreach (var value in list)
+            bool addComma = false;
+            foreach (dynamic value in list)
             {
                 if (addComma)
                     _writer.Write(',');

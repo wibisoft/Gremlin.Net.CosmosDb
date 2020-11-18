@@ -15,10 +15,7 @@ namespace Gremlin.Net.CosmosDb.Serialization
         /// Gets a value indicating whether this <see cref="T:Newtonsoft.Json.JsonConverter"/> can write JSON.
         /// </summary>
         /// <value><c>true</c> if this <see cref="T:Newtonsoft.Json.JsonConverter"/> can write JSON; otherwise, <c>false</c>.</value>
-        public override bool CanWrite
-        {
-            get { return false; }
-        }
+        public override bool CanWrite => false;
 
         /// <summary>
         /// Determines whether this instance can convert the specified object type.
@@ -27,7 +24,7 @@ namespace Gremlin.Net.CosmosDb.Serialization
         /// <returns><c>true</c> if this instance can convert the specified object type; otherwise, <c>false</c>.</returns>
         public override bool CanConvert(Type objectType)
         {
-            return objectType == TypeCache.Element;
+            return objectType == typeof(Element);
         }
 
         /// <summary>
@@ -45,8 +42,8 @@ namespace Gremlin.Net.CosmosDb.Serialization
             if (reader == null)
                 throw new ArgumentNullException(nameof(reader));
 
-            var jo = JObject.Load(reader);
-            var elementType = jo[PropertyNames.Type].Value<string>();
+            JObject jo = JObject.Load(reader);
+            string elementType = jo[PropertyNames.Type].Value<string>();
             Element element;
             switch (elementType)
             {

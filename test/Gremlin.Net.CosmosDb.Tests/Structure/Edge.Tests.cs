@@ -14,7 +14,7 @@ namespace Gremlin.Net.CosmosDb.Structure
             sut.Properties[nameof(SomeObject.IntegerProperty)] = expected.IntegerProperty;
             sut.Properties[nameof(SomeObject.StringProperty)] = expected.StringProperty;
 
-            var result = sut.ToObject<SomeObject>();
+            SomeObject result = sut.ToObject<SomeObject>();
 
             expected.Should().BeEquivalentTo(result);
         }
